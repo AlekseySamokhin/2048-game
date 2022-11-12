@@ -1,0 +1,138 @@
+body {
+  font-family: 'Josefin Sans', sans-serif;
+  background: #faf8ef;
+  color: #776e65;
+}
+
+.container {
+  max-width: 550px;
+  padding: 0 25px;
+  margin: 0 auto;
+}
+
+/* start header */
+.header__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header {
+  margin-top: 60px;
+}
+
+.title {
+  font-size: 80px;
+}
+
+.header__scores {
+  display: flex;
+}
+
+.scores__container {
+  display: flex;
+}
+
+.score__block {
+  border-radius: 3px;
+  padding-top: 0px;
+  background-color: #bbada0;
+  color: #fff;
+  height: 55px;
+  width: 100px;
+  text-align: center;
+}
+
+.score__block:not(:last-child) {
+  margin-right: 5px;
+}
+
+.score__title {
+  display: block;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.score__number {
+  display: block;
+  font-size: 22.5px;
+  font-weight: bold;
+}
+
+/* end header */
+
+/* start middle block  */
+.middle-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-intro {
+  font-size: 20px;
+}
+
+.new-game {
+  display: inline-block;
+  background: #8f7a66;
+  border-radius: 3px;
+  padding: 0 20px;
+  text-decoration: none;
+  font-weight: bold;
+  color: #f9f6f2;
+  height: 40px;
+  font-size: 20px;
+  line-height: 42px;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* end middle block  */
+
+/* start game container */
+.game-container {
+  margin-top: 40px;
+  position: relative;
+  padding: 15px;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -ms-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -ms-touch-action: none;
+  touch-action: none;
+  background: #bbada0;
+  border-radius: 6px;
+  width: 500px;
+  height: 500px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.grid-container {
+  position: absolute;
+  z-index: 1;
+}
+
+.grid-row {
+  margin-bottom: 15px;
+}
+
+.grid-row::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.grid-cell {
+  width: 106.25px;
+  height: 106.25px;
+  margin-right: 15px;
+  float: left;
+  border-radius: 3px;
+  background: rgba(238, 228, 218, 0.35);
+}
+/* end game container */
