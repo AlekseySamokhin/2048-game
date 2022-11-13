@@ -1,6 +1,6 @@
 body {
   font-family: 'Josefin Sans', sans-serif;
-  background: #faf8ef;
+  background-color: #faf8ef;
   color: #776e65;
 }
 
@@ -10,7 +10,7 @@ body {
   margin: 0 auto;
 }
 
-/* start header */
+/* start header block */
 .header__wrapper {
   display: flex;
   justify-content: space-between;
@@ -58,7 +58,7 @@ body {
   font-weight: bold;
 }
 
-/* end header */
+/* end header block */
 
 /* start middle block  */
 .middle-block {
@@ -73,7 +73,7 @@ body {
 
 .new-game {
   display: inline-block;
-  background: #8f7a66;
+  background-color: #8f7a66;
   border-radius: 3px;
   padding: 0 20px;
   text-decoration: none;
@@ -90,7 +90,7 @@ body {
 
 /* end middle block  */
 
-/* start game container */
+/* start game block */
 .game-container {
   margin-top: 40px;
   position: relative;
@@ -103,13 +103,15 @@ body {
   -ms-user-select: none;
   -ms-touch-action: none;
   touch-action: none;
-  background: #bbada0;
+  background-color: #bbada0;
   border-radius: 6px;
   width: 500px;
   height: 500px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .grid-container {
@@ -128,11 +130,96 @@ body {
 }
 
 .grid-cell {
+  margin-bottom: 15px;
   width: 106.25px;
   height: 106.25px;
   margin-right: 15px;
   float: left;
   border-radius: 3px;
-  background: rgba(238, 228, 218, 0.35);
+  background-color: rgba(238, 228, 218, 0.35);
 }
-/* end game container */
+
+.square {
+  font-family: Arial, Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  float: left;
+  width: 106.25px;
+  height: 106.25px;
+  margin: 0 15px 15px 0;
+  border-radius: 3px;
+  background-color: rgba(238, 228, 218, 0.35);
+}
+
+.square-2 {
+  background-color: #eee4da;
+}
+
+.square-4 {
+  background-color: #eee1c9;
+}
+
+.square-8 {
+  color: #f9f6f2;
+  background-color: #f3b27a;
+}
+
+.square-16 {
+  color: #f9f6f2;
+  background-color: #f69664;
+}
+
+.square-32 {
+  color: #f9f6f2;
+  background-color: #f77c5f;
+}
+
+.square-64 {
+  color: #f9f6f2;
+  background-color: #f75f3b;
+}
+
+.square-128 {
+  color: #f9f6f2;
+  background-color: #edd073;
+}
+
+.square-256 {
+  color: #f9f6f2;
+  background-color: #edcc62;
+}
+
+.square-512 {
+  color: #f9f6f2;
+  background-color: #edc950;
+}
+
+.square-1024 {
+  color: #f9f6f2;
+  background-color: #edc53f;
+  font-size: 37.5px;
+}
+
+.square-2048 {
+  color: #f9f6f2;
+  background-color: #edc22e;
+  font-size: 37.5px;
+}
+
+.square-4096 {
+  color: #f9f6f2;
+  background-color: #fe3d3d;
+  font-size: 37.5px;
+}
+
+.square-8192 {
+  color: #f9f6f2;
+  background-color: #ff2020;
+  font-size: 37.5px;
+}
+/* end game block */
