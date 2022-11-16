@@ -23,11 +23,11 @@
             <div class="scores__container">
               <div class="score__block">
                 <span class="score__title">Score</span>
-                <span class="score__number">0</span>
+                <span id="score" class="score__number">0</span>
               </div>
               <div class="score__block">
                 <span class="score__title">Best</span>
-                <span class="score__number">0</span>
+                <span id="best-score" class="score__number">0</span>
               </div>
             </div>
           </div>
@@ -40,7 +40,10 @@
       </div>
 
       <div class="game-container">
-        <div id="game-board" class="grid-container"></div>
+        <div class="game-over">
+          <h1>You Looser!</h1>
+        </div>
+        <div class="squares-container"></div>
       </div>
     </div>
 
