@@ -1,5 +1,5 @@
 let gameBoard = [
-  [2048, 0, 0, 0],
+  [0, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
@@ -52,8 +52,8 @@ function setGameBoard() {
     }
   }
 
-  randomPosititon();
-  randomPosititon();
+  randomPosition();
+  randomPosition();
 }
 
 function updateSquareValue(number, square) {
@@ -71,33 +71,37 @@ function updateSquareValue(number, square) {
 }
 
 // random position square on game board
-function randomPosititon() {
-  // two random numbers from 0 to 3
-  let num1 = Math.floor(Math.random() * rows);
-  let num2 = Math.floor(Math.random() * columns);
+function randomPosition() {
+  let flag = false;
 
-  if (gameBoard[num1][num2] === 0) {
-    let square = document.getElementById(`${num1}-${num2}`);
+  while (!flag) {
+    // two random numbers from 0 to 3
+    let num1 = Math.floor(Math.random() * rows);
+    let num2 = Math.floor(Math.random() * columns);
+    if (gameBoard[num1][num2] === 0) {
+      let square = document.getElementById(`${num1}-${num2}`);
 
-    // square.classList.add("square");
+      // square.classList.add("square");
 
-    // if random number = 0
-    if (Math.floor(Math.random() * 10) === 0) {
-      gameBoard[num1][num2] = 4;
+      // if random number = 0
+      if (Math.floor(Math.random() * 10) === 0) {
+        gameBoard[num1][num2] = 4;
 
-      square.classList.add("square-4");
-      square.textContent = 4;
-    } else {
-      gameBoard[num1][num2] = 2;
+        square.classList.add("square-4");
+        square.textContent = 4;
 
-      square.classList.add("square-2");
-      square.textContent = 2;
+        flag = true;
+      } else {
+        gameBoard[num1][num2] = 2;
+
+        square.classList.add("square-2");
+        square.textContent = 2;
+
+        flag = true;
+      }
+
+      checkForGameOver();
     }
-
-    checkForGameOver();
-    // нужно проверить на конец игры???
-  } else {
-    randomPosititon();
   }
 }
 
@@ -182,7 +186,7 @@ function moveLeft() {
 
   checkForGameOver();
   checkForWin();
-  randomPosititon();
+  randomPosition();
 }
 
 function moveRight() {
@@ -203,7 +207,7 @@ function moveRight() {
 
   checkForGameOver();
   checkForWin();
-  randomPosititon();
+  randomPosition();
 }
 
 function checkForGameOver() {
