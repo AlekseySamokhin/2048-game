@@ -5,58 +5,27 @@ let gameBoard = [
   [0, 0, 0, 0],
 ];
 
-let rows = 4;
-let columns = 4;
+const rows = 4;
+const columns = 4;
 
 let score = 0;
 let bestScore;
 
-let btnNewGame = document.querySelector(".new-game");
+const elemSquaresContainer = document.querySelector(".squares-container");
+
+const btnNewGame = document.querySelector(".new-game");
+const btnContinueGame = document.querySelector(".continue-game");
+
+const elemMessageBlockGame = document.querySelector(".game-message");
+const elemMessageTitleGame = document.querySelector(".game-message__title");
+const elemMessageTextGame = document.querySelector(".game-message__text");
+const elemMessageContinue = document.querySelector(".game-message__continue");
 
 // span score and best score
-let elemBestScore = document.getElementById("best-score");
-let elemScore = document.getElementById("score");
+const elemBestScore = document.getElementById("best-score");
+const elemScore = document.getElementById("score");
 
-document.addEventListener("DOMContentLoaded", () => {
-  // function is called when the page is loaded
-  checkBestScore();
-  setGameBoard();
-});
-
-function checkBestScore() {
-  // setting value ​​from localstorage
-  if (localStorage.getItem("2048-best-score") === null) {
-    localStorage.setItem("2048-best-score", score); // initial score = 0
-    elemBestScore.textContent = score;
-  } else {
-    bestScore = parseInt(localStorage.getItem("2048-best-score"));
-    elemBestScore.textContent = bestScore;
-  }
-}
-
-function setGameBoard() {
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < columns; c++) {
-      let square = document.createElement("div");
-      square.id = `${r}-${c}`; // assign id 0-1, 0-2, 0-3, 0-4, 1-1 etc...
-
-      let number = gameBoard[r][c];
-
-      updateSquareValue(number, square);
-
-      square.classList.add("square");
-
-      if (number > 0) {
-        square.classList.add(`square-${number}`);
-      }
-    }
-  }
-
-  randomPosition();
-  randomPosition();
-}
-
-function updateSquareValue(number, square) {
+const updateSquareValue = (number, square) => {
   square.textContent = "";
   square.classList.value = "";
 
@@ -67,12 +36,20 @@ function updateSquareValue(number, square) {
     square.classList.add(`square-${number}`);
   }
 
-  document.querySelector(".squares-container").append(square);
+  elemSquaresContainer.append(square);
 }
 
 // random position square on game board
-function randomPosition() {
-  let flag = false;
+const randomPosition = () => {
+  let flag = true;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < columns; c++) {
+      if (gameBoard[r][c] === 0) {
+        flag = false;
+      }
+    }
+  }
 
   while (!flag) {
     // two random numbers from 0 to 3
@@ -81,7 +58,9 @@ function randomPosition() {
     if (gameBoard[num1][num2] === 0) {
       let square = document.getElementById(`${num1}-${num2}`);
 
-      // square.classList.add("square");
+      square.textContent = "";
+      square.classList.value = "";
+      square.classList.add("square");
 
       // if random number = 0
       if (Math.floor(Math.random() * 10) === 0) {
@@ -105,8 +84,38 @@ function randomPosition() {
   }
 }
 
-// keyboard button press event
-document.addEventListener("keyup", controlSquares);
+const setGameBoard = () => {
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < columns; c++) {
+      let square = document.createElement("div");
+      square.id = `${r}-${c}`; // assign id 0-1, 0-2, 0-3, 0-4, 1-1 etc..
+
+      let number = gameBoard[r][c];
+
+      updateSquareValue(number, square);
+
+      square.classList.add("square");
+
+      if (number > 0) {
+        square.classList.add(`square-${number}`);
+      }
+    }
+  }
+
+  randomPosition();
+  randomPosition();
+};
+
+const checkBestScore = () => {
+  // setting value ​​from localstorage
+  if (localStorage.getItem("2048-best-score") === null) {
+    localStorage.setItem("2048-best-score", score); // initial score = 0
+    elemBestScore.textContent = score;
+  } else {
+    bestScore = parseInt(localStorage.getItem("2048-best-score"));
+    elemBestScore.textContent = bestScore;
+  }
+};
 
 function controlSquares(event) {
   switch (event.key) {
@@ -125,12 +134,8 @@ function controlSquares(event) {
   }
 }
 
-function filterZeros(array) {
-  return array.filter((num) => num != 0);
-}
-
 function slide(row) {
-  row = filterZeros(row); // create new array without zeros;
+  row = row.filter((num) => num != 0); // create new array without zeros;
 
   for (let i = 0; i < row.length; i++) {
     if (row[i] === row[i + 1]) {
@@ -151,7 +156,7 @@ function slide(row) {
     elemBestScore.textContent = score;
   }
 
-  row = filterZeros(row);
+  row = row.filter((num) => num != 0); // create new array without zeros;
 
   while (row.length < rows) {
     row.push(0);
@@ -178,15 +183,16 @@ function moveLeft() {
 
     for (let c = 0; c < columns; c++) {
       let square = document.getElementById(`${r}-${c}`);
+
       let number = gameBoard[r][c];
 
       updateSquareValue(number, square);
     }
   }
 
+  randomPosition();
   checkForGameOver();
   checkForWin();
-  randomPosition();
 }
 
 function moveRight() {
@@ -199,47 +205,108 @@ function moveRight() {
 
     for (let c = 0; c < columns; c++) {
       let square = document.getElementById(`${r}-${c}`);
+
       let number = gameBoard[r][c];
 
       updateSquareValue(number, square);
     }
   }
 
+  randomPosition();
   checkForGameOver();
   checkForWin();
-  randomPosition();
 }
 
 function checkForGameOver() {
-  let count = 0;
+  let number = 0;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
       if (gameBoard[r][c] === 0) {
-        count++;
+        number++;
       }
     }
   }
 
-  if (count === 0) {
-    console.log(controlSquares);
-    document.removeEventListener("keydown", controlSquares);
-
-    document.querySelector(".game-over h1").textContent = "You looser!";
-    document.querySelector(".game-over").style.display = "block";
+  if (number === 0) {
+    generateGameMessage(number);
   }
 }
 
 function checkForWin() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
-      if (gameBoard[r][c] === 2048) {
-        console.log(controlSquares);
-        document.removeEventListener("keydown", controlSquares);
+      let number = gameBoard[r][c];
 
-        document.querySelector(".game-over h1").textContent = "You win!";
-        document.querySelector(".game-over").style.display = "block";
+      if (number === 2048) {
+        generateGameMessage(number);
+      }
+
+      if (number === 8192) {
+        generateGameMessage(number);
       }
     }
   }
 }
+
+function generateGameMessage(number) {
+  document.removeEventListener("keyup", controlSquares);
+
+  elemMessageBlockGame.style.display = "block";
+
+  if (number === 0) {
+    elemMessageTitleGame.textContent = "You loose!";
+    elemMessageTextGame.textContent = "Please, press New Game!";
+  } else if (number === 2048) {
+    elemMessageContinue.style.display = "block";
+    elemMessageTitleGame.textContent = "You win!";
+    elemMessageTextGame.textContent = "Our congratulations!";
+  } else if (number === 8192) {
+    elemMessageTitleGame.textContent = "You сrazy!";
+    elemMessageTextGame.textContent = "You completed all game!";
+  }
+}
+
+function restartGame() {
+  gameBoard = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ];
+
+  const squares = document.querySelectorAll(".square");
+
+  for (let i = 0; i < squares.length; i++) {
+    squares[i].textContent = "";
+    squares[i].classList.value = "";
+    squares[i].classList.add("square");
+  }
+
+  elemMessageBlockGame.style.display = "none";
+
+  document.addEventListener("keyup", controlSquares);
+
+  randomPosition();
+  randomPosition();
+}
+
+function continueGame() {
+  elemMessageContinue.style.display = "none";
+  elemMessageBlockGame.style.display = "none";
+
+  document.addEventListener("keyup", controlSquares);
+}
+
+// events
+document.addEventListener("DOMContentLoaded", () => {
+  // functions is called when the page is loaded
+  checkBestScore();
+  setGameBoard();
+});
+
+document.addEventListener("keyup", controlSquares);
+
+btnNewGame.addEventListener("click", restartGame);
+
+btnContinueGame.addEventListener("click", continueGame);
