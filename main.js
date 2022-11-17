@@ -1,5 +1,5 @@
 let gameBoard = [
-  [0, 0, 0, 0],
+  [2048, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
@@ -37,7 +37,7 @@ const updateSquareValue = (number, square) => {
   }
 
   elemSquaresContainer.append(square);
-}
+};
 
 // random position square on game board
 const randomPosition = () => {
@@ -82,7 +82,7 @@ const randomPosition = () => {
       checkForGameOver();
     }
   }
-}
+};
 
 const setGameBoard = () => {
   for (let r = 0; r < rows; r++) {
@@ -117,7 +117,7 @@ const checkBestScore = () => {
   }
 };
 
-function controlSquares(event) {
+const controlSquares = (event) => {
   switch (event.key) {
     case "ArrowUp":
       moveUp();
@@ -134,7 +134,7 @@ function controlSquares(event) {
   }
 }
 
-function slide(row) {
+const slide = (row) => {
   row = row.filter((num) => num != 0); // create new array without zeros;
 
   for (let i = 0; i < row.length; i++) {
@@ -165,15 +165,15 @@ function slide(row) {
   return row;
 }
 
-function moveUp() {
+const moveUp = () => {
   console.log("Вверх");
 }
 
-function moveDown() {
+const moveDown = () => {
   console.log("Вниз");
 }
 
-function moveLeft() {
+const moveLeft = () => {
   for (let r = 0; r < rows; r++) {
     let row = gameBoard[r]; // array
 
@@ -195,7 +195,7 @@ function moveLeft() {
   checkForWin();
 }
 
-function moveRight() {
+const moveRight = () => {
   for (let r = 0; r < rows; r++) {
     let row = gameBoard[r].reverse(); // array
 
@@ -217,7 +217,7 @@ function moveRight() {
   checkForWin();
 }
 
-function checkForGameOver() {
+const checkForGameOver = () => {
   let number = 0;
 
   for (let r = 0; r < rows; r++) {
@@ -233,7 +233,7 @@ function checkForGameOver() {
   }
 }
 
-function checkForWin() {
+const checkForWin = () => {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
       let number = gameBoard[r][c];
@@ -249,7 +249,7 @@ function checkForWin() {
   }
 }
 
-function generateGameMessage(number) {
+const generateGameMessage = (number) => {
   document.removeEventListener("keyup", controlSquares);
 
   elemMessageBlockGame.style.display = "block";
@@ -267,7 +267,7 @@ function generateGameMessage(number) {
   }
 }
 
-function restartGame() {
+const restartGame = () => {
   gameBoard = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -291,7 +291,7 @@ function restartGame() {
   randomPosition();
 }
 
-function continueGame() {
+const continueGame = () => {
   elemMessageContinue.style.display = "none";
   elemMessageBlockGame.style.display = "none";
 
