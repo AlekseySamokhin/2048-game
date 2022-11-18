@@ -7,7 +7,6 @@ let score = 0;
 let bestScore;
 
 let flagMessage = true; // for don't show game message "you win" after 2048 point's
-let flagArrow = true;
 
 const elemSquaresContainer = document.querySelector(".squares-container");
 
@@ -24,6 +23,18 @@ const elemMessageContinue = document.querySelector(".game-message__continue");
 // span score and best score
 const elemBestScore = document.getElementById("best-score");
 const elemScore = document.getElementById("score");
+
+const isArraysEqual = (arr1, arr2) => {
+  if (arr1.length != arr2.length) return false;
+
+  for (let i = 0; i < arr1.length; i++) {
+    if(arr1[i] != arr2[i]) { 
+      return false;
+    }
+  }
+
+  return true;
+};
 
 // random position square on game board
 const randomPosition = () => {
@@ -127,20 +138,29 @@ const checkBestScore = () => {
 };
 
 const controlSquares = (event) => {
+  let hasModification = false; 
+
   switch (event.key) {
     case "ArrowUp":
-      moveUp();
+      hasModification = moveUp();
       break;
     case "ArrowDown":
-      moveDown();
+      hasModification = moveDown();
       break;
     case "ArrowLeft":
-      moveLeft();
+      hasModification = moveLeft();
       break;
     case "ArrowRight":
-      moveRight();
+      hasModification = moveRight();
       break;
   }
+
+  if (hasModification) {
+    randomPosition();
+  }
+  
+  checkForGameOver();
+  checkForWin();
 };
 
 const filterZero = (array) => {
@@ -150,8 +170,9 @@ const filterZero = (array) => {
 const move = (row) => {
   row = filterZero(row); // create new array without zeros: [2, 2, 0, 0] => [2, 2];
 
+  let hasMergedSquares = false;
+
   for (let i = 0; i < row.length; i++) {
-    flagArrow = true;
     if (row[i] === row[i + 1]) {
       // if the values ​​of adjacent cells are the same
       row[i] = row[i] * 2;
@@ -159,7 +180,9 @@ const move = (row) => {
       score = score + row[i];
 
       elemScore.textContent = score;
-    }
+
+      hasMergedSquares = true;
+    } 
   }
 
   row = filterZero(row); // create new array without zeros: [4, 0] => [4]
@@ -175,13 +198,25 @@ const move = (row) => {
     elemBestScore.textContent = score;
   }
 
-  return row;
+  return [row, hasMergedSquares];
 };
 
 const moveUp = () => {
+  let hasStep = false;
+
   for (let c = 0; c < columns; c++) {
     let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]]; // [2, 2, 0, 0];
-    row = move(row); // [4, 0, 0, 0]
+
+    let modifiedRow = move(row); // array [[4, 0, 0, 0], true];
+
+    let hasModification = !isArraysEqual(row, modifiedRow[0]);
+
+    row = modifiedRow[0];
+
+    if (modifiedRow[1] || hasModification) {
+      hasStep = true;
+    }  
+
     for (let r = 0; r < rows; r++) {
       gameBoard[r][c] = row[r];
 
@@ -192,19 +227,28 @@ const moveUp = () => {
     }
   }
 
-    randomPosition();
-
-
-  checkForGameOver();
-  checkForWin();
+  return hasStep;
 };
 
 const moveDown = () => {
+  let hasStep = false;
+
   for (let c = 0; c < columns; c++) {
     let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]];
     row.reverse();
-    row = move(row);
+
+    let modifiedRow = move(row); // array [[4, 0, 0, 0], true];
+
+    let hasModification = !isArraysEqual(row, modifiedRow[0]);
+
+    row = modifiedRow[0];
+
     row.reverse();
+
+    if (modifiedRow[1] || hasModification) {
+      hasStep = true;
+    }  
+ 
     for (let r = 0; r < rows; r++) {
       gameBoard[r][c] = row[r];
 
@@ -215,20 +259,27 @@ const moveDown = () => {
     }
   }
 
-
-    randomPosition();
-
-  checkForGameOver();
-  checkForWin();
+  return hasStep;
 };
 
+
 const moveLeft = () => {
+  let hasStep = false; 
+
   for (let r = 0; r < rows; r++) {
     let row = gameBoard[r]; // array [2, 2, 0, 0] etc...
 
-    row = move(row); // array [4, 0, 0, 0];
+    let modifiedRow = move(row); // array [[4, 0, 0, 0], true];
 
+    let hasModification = !isArraysEqual(row, modifiedRow[0]);
+
+    row = modifiedRow[0];
+    
     gameBoard[r] = row;
+
+    if (modifiedRow[1] || hasModification) {
+      hasStep = true;
+    }  
 
     for (let c = 0; c < columns; c++) {
       let square = document.getElementById(`${r}-${c}`);
@@ -239,21 +290,26 @@ const moveLeft = () => {
     }
   }
 
-
-    randomPosition();
-
-
-  checkForGameOver();
-  checkForWin();
+  return hasStep;
 };
 
 const moveRight = () => {
+  let hasStep = false; 
+
   for (let r = 0; r < rows; r++) {
     let row = gameBoard[r].reverse(); // [0, 0, 2, 2] => [2, 2, 0, 0];
 
-    row = move(row); // [4, 0, 0, 0];
+    let modifiedRow = move(row); // array [[4, 0, 0, 0], true];
+
+    let hasModification = !isArraysEqual(row, modifiedRow[0]);
+
+    row = modifiedRow[0];
 
     gameBoard[r] = row.reverse(); // [0, 0, 0, 4];
+
+    if (modifiedRow[1] || hasModification) {
+      hasStep = true;
+    }  
 
     for (let c = 0; c < columns; c++) {
       let square = document.getElementById(`${r}-${c}`);
@@ -264,11 +320,7 @@ const moveRight = () => {
     }
   }
 
-    randomPosition();
-
-
-  checkForGameOver();
-  checkForWin();
+  return hasStep;
 };
 
 const checkForGameOver = () => {
