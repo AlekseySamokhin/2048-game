@@ -132,7 +132,13 @@ body {
 
 .game-message__continue a {
   text-decoration: underline;
-  color: rgb(202, 40, 94);
+  color: rgba(202, 40, 94);
+  transition: all 500ms;
+}
+
+.game-message__continue a:hover {
+  text-decoration: none;
+  font-weight: bold;
 }
 /* end restart game */
 
@@ -140,21 +146,10 @@ body {
   margin-top: 40px;
   position: relative;
   padding: 15px;
-  cursor: default;
-  -webkit-touch-callout: none;
-  -ms-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -ms-touch-action: none;
-  touch-action: none;
   background-color: #bbada0;
   border-radius: 6px;
   width: 500px;
   height: 500px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   display: flex;
   flex-wrap: nowrap;
 }
@@ -188,11 +183,9 @@ body {
   font-family: Arial, Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 40px;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   float: left;
   width: 106.25px;
   height: 106.25px;

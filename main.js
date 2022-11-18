@@ -11,7 +11,7 @@ const columns = 4;
 let score = 0;
 let bestScore;
 
-let flag = true;
+let flag = true; // for don't show game message "you win" after 2048 point's
 
 const elemSquaresContainer = document.querySelector(".squares-container");
 
@@ -43,6 +43,7 @@ const randomPosition = () => {
     // two random numbers from 0 to 3
     let num1 = Math.floor(Math.random() * rows);
     let num2 = Math.floor(Math.random() * columns);
+    
     if (gameBoard[num1][num2] === 0) {
       let square = document.getElementById(`${num1}-${num2}`);
 
@@ -69,6 +70,18 @@ const randomPosition = () => {
 
       checkForGameOver();
     }
+  }
+};
+
+const updateSquareValue = (number, square) => {
+  square.textContent = "";
+  square.classList.value = "";
+
+  square.classList.add("square");
+
+  if (number > 0) {
+    square.textContent = number.toString();
+    square.classList.add(`square-${number}`);
   }
 };
 
@@ -128,7 +141,7 @@ const controlSquares = (event) => {
   }
 };
 
-const slide = (row) => {
+const move = (row) => {
   row = row.filter((num) => num != 0); // create new array without zeros;
 
   for (let i = 0; i < row.length; i++) {
@@ -159,13 +172,30 @@ const slide = (row) => {
   return row;
 };
 
-const moveUp = () => {};
+const moveUp = () => {
+  for (let c = 0; c < columns; c++) {
+    let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]];
+    row = move(row);
+    for (let r = 0; r < rows; r++) {
+      gameBoard[r][c] = row[r];
+
+      const square = document.getElementById(`${r}-${c}`);
+      const number = gameBoard[r][c];
+
+      updateSquareValue(number, square);
+    }
+  }
+
+  randomPosition();
+  checkForGameOver();
+  checkForWin();
+};
 
 const moveDown = () => {
   for (let c = 0; c < columns; c++) {
     let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]];
     row.reverse();
-    row = slide(row);
+    row = move(row);
     row.reverse();
     for (let r = 0; r < rows; r++) {
       gameBoard[r][c] = row[r];
@@ -182,23 +212,11 @@ const moveDown = () => {
   checkForWin();
 };
 
-const updateSquareValue = (number, square) => {
-  square.textContent = "";
-  square.classList.value = "";
-
-  square.classList.add("square");
-
-  if (number > 0) {
-    square.textContent = number.toString();
-    square.classList.add(`square-${number}`);
-  }
-};
-
 const moveLeft = () => {
   for (let r = 0; r < rows; r++) {
     let row = gameBoard[r]; // array
 
-    row = slide(row);
+    row = move(row);
 
     gameBoard[r] = row;
 
@@ -220,7 +238,7 @@ const moveRight = () => {
   for (let r = 0; r < rows; r++) {
     let row = gameBoard[r].reverse(); // array
 
-    row = slide(row);
+    row = move(row);
 
     gameBoard[r] = row.reverse();
 
@@ -261,7 +279,7 @@ const checkForWin = () => {
 
       if (number === 2048 && flag) {
         generateGameMessage(number);
-        
+
         flag = false;
       }
 
