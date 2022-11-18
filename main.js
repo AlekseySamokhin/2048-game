@@ -170,6 +170,8 @@ const move = (row) => {
     row.push(0); // [4, 0, 0, 0];
   }
 
+  checkBestScore();
+  
   // value best score in local-storage
   if (score > bestScore) {
     // replace value from localsrorage value from score
