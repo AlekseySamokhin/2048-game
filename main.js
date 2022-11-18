@@ -4,7 +4,7 @@ const rows = 4;
 const columns = 4;
 
 let score = 0;
-let bestScore = 0;
+let bestScore;
 
 let flag = true; // for don't show game message "you win" after 2048 point's
 
@@ -118,9 +118,11 @@ const checkBestScore = () => {
   if (localStorage.getItem("2048-best-score") === null) {
     localStorage.setItem("2048-best-score", score); // initial score = 0
     elemBestScore.textContent = score;
+    bestScore = 0;
   } else {
     bestScore = parseInt(localStorage.getItem("2048-best-score"));
     elemBestScore.textContent = bestScore;
+    console.log(bestScore);
   }
 };
 
