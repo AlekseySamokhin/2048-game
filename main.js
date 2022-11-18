@@ -141,8 +141,12 @@ const controlSquares = (event) => {
   }
 };
 
+const filterZero = (array) => {
+  return array.filter((num) => num != 0);
+}
+
 const move = (row) => {
-  row = row.filter((num) => num != 0); // create new array without zeros;
+  row = filterZero(row); // create new array without zeros;
 
   for (let i = 0; i < row.length; i++) {
     if (row[i] === row[i + 1]) {
@@ -163,7 +167,7 @@ const move = (row) => {
     elemBestScore.textContent = score;
   }
 
-  row = row.filter((num) => num != 0); // create new array without zeros;
+  row = filterZero(row); // create new array without zeros;
 
   while (row.length < rows) {
     row.push(0);
