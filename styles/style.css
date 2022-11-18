@@ -192,6 +192,7 @@ body {
   margin: 0 15px 15px 0;
   border-radius: 3px;
   background-color: rgba(238, 228, 218, 0.35);
+  transition: all 750ms;
 }
 
 .square-2 {

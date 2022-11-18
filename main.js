@@ -129,19 +129,15 @@ const checkBestScore = () => {
 const controlSquares = (event) => {
   switch (event.key) {
     case "ArrowUp":
-      console.log("UP");
       moveUp();
       break;
     case "ArrowDown":
-      console.log("DOWN");
       moveDown();
       break;
     case "ArrowLeft":
-      console.log("LEFT");
       moveLeft();
       break;
     case "ArrowRight":
-      console.log("RIGHT");
       moveRight();
       break;
   }
