@@ -1,5 +1,5 @@
 let gameBoard = [
-  [2048, 0, 0, 0],
+  [0, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
   [0, 0, 0, 0],
@@ -10,6 +10,8 @@ const columns = 4;
 
 let score = 0;
 let bestScore;
+
+let flag = true;
 
 const elemSquaresContainer = document.querySelector(".squares-container");
 
@@ -24,20 +26,6 @@ const elemMessageContinue = document.querySelector(".game-message__continue");
 // span score and best score
 const elemBestScore = document.getElementById("best-score");
 const elemScore = document.getElementById("score");
-
-const updateSquareValue = (number, square) => {
-  square.textContent = "";
-  square.classList.value = "";
-
-  square.classList.add("square");
-
-  if (number > 0) {
-    square.textContent = number;
-    square.classList.add(`square-${number}`);
-  }
-
-  elemSquaresContainer.append(square);
-};
 
 // random position square on game board
 const randomPosition = () => {
@@ -99,6 +87,8 @@ const setGameBoard = () => {
       if (number > 0) {
         square.classList.add(`square-${number}`);
       }
+
+      elemSquaresContainer.append(square);
     }
   }
 
@@ -120,19 +110,23 @@ const checkBestScore = () => {
 const controlSquares = (event) => {
   switch (event.key) {
     case "ArrowUp":
+      console.log("UP");
       moveUp();
       break;
     case "ArrowDown":
+      console.log("DOWN");
       moveDown();
       break;
     case "ArrowLeft":
+      console.log("LEFT");
       moveLeft();
       break;
     case "ArrowRight":
+      console.log("RIGHT");
       moveRight();
       break;
   }
-}
+};
 
 const slide = (row) => {
   row = row.filter((num) => num != 0); // create new array without zeros;
@@ -163,15 +157,42 @@ const slide = (row) => {
   }
 
   return row;
-}
+};
 
-const moveUp = () => {
-  console.log("Вверх");
-}
+const moveUp = () => {};
 
 const moveDown = () => {
-  console.log("Вниз");
-}
+  for (let c = 0; c < columns; c++) {
+    let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]];
+    row.reverse();
+    row = slide(row);
+    row.reverse();
+    for (let r = 0; r < rows; r++) {
+      gameBoard[r][c] = row[r];
+
+      const square = document.getElementById(`${r}-${c}`);
+      const number = gameBoard[r][c];
+
+      updateSquareValue(number, square);
+    }
+  }
+
+  randomPosition();
+  checkForGameOver();
+  checkForWin();
+};
+
+const updateSquareValue = (number, square) => {
+  square.textContent = "";
+  square.classList.value = "";
+
+  square.classList.add("square");
+
+  if (number > 0) {
+    square.textContent = number.toString();
+    square.classList.add(`square-${number}`);
+  }
+};
 
 const moveLeft = () => {
   for (let r = 0; r < rows; r++) {
@@ -193,7 +214,7 @@ const moveLeft = () => {
   randomPosition();
   checkForGameOver();
   checkForWin();
-}
+};
 
 const moveRight = () => {
   for (let r = 0; r < rows; r++) {
@@ -215,7 +236,7 @@ const moveRight = () => {
   randomPosition();
   checkForGameOver();
   checkForWin();
-}
+};
 
 const checkForGameOver = () => {
   let number = 0;
@@ -231,15 +252,17 @@ const checkForGameOver = () => {
   if (number === 0) {
     generateGameMessage(number);
   }
-}
+};
 
 const checkForWin = () => {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
       let number = gameBoard[r][c];
 
-      if (number === 2048) {
+      if (number === 2048 && flag) {
         generateGameMessage(number);
+        
+        flag = false;
       }
 
       if (number === 8192) {
@@ -247,7 +270,7 @@ const checkForWin = () => {
       }
     }
   }
-}
+};
 
 const generateGameMessage = (number) => {
   document.removeEventListener("keyup", controlSquares);
@@ -265,7 +288,7 @@ const generateGameMessage = (number) => {
     elemMessageTitleGame.textContent = "You сrazy!";
     elemMessageTextGame.textContent = "You completed all game!";
   }
-}
+};
 
 const restartGame = () => {
   gameBoard = [
@@ -289,14 +312,14 @@ const restartGame = () => {
 
   randomPosition();
   randomPosition();
-}
+};
 
 const continueGame = () => {
   elemMessageContinue.style.display = "none";
   elemMessageBlockGame.style.display = "none";
 
   document.addEventListener("keyup", controlSquares);
-}
+};
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
