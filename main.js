@@ -6,7 +6,8 @@ const columns = 4;
 let score = 0;
 let bestScore;
 
-let flag = true; // for don't show game message "you win" after 2048 point's
+let flagMessage = true; // for don't show game message "you win" after 2048 point's
+let flagArrow = true;
 
 const elemSquaresContainer = document.querySelector(".squares-container");
 
@@ -38,11 +39,11 @@ const randomPosition = () => {
 
   while (!flag) {
     // two random numbers from 0 to 3
-    let num1 = Math.floor(Math.random() * rows);
-    let num2 = Math.floor(Math.random() * columns);
+    const num1 = Math.floor(Math.random() * rows);
+    const num2 = Math.floor(Math.random() * columns);
 
     if (gameBoard[num1][num2] === 0) {
-      let square = document.getElementById(`${num1}-${num2}`);
+      const square = document.getElementById(`${num1}-${num2}`);
 
       square.textContent = "";
       square.classList.value = "";
@@ -122,7 +123,6 @@ const checkBestScore = () => {
   } else {
     bestScore = parseInt(localStorage.getItem("2048-best-score"));
     elemBestScore.textContent = bestScore;
-    console.log(bestScore);
   }
 };
 
@@ -151,11 +151,11 @@ const move = (row) => {
   row = filterZero(row); // create new array without zeros: [2, 2, 0, 0] => [2, 2];
 
   for (let i = 0; i < row.length; i++) {
+    flagArrow = true;
     if (row[i] === row[i + 1]) {
       // if the values ​​of adjacent cells are the same
       row[i] = row[i] * 2;
       row[i + 1] = 0; // [4, 0]
-
       score = score + row[i];
 
       elemScore.textContent = score;
@@ -192,7 +192,9 @@ const moveUp = () => {
     }
   }
 
-  randomPosition();
+    randomPosition();
+
+
   checkForGameOver();
   checkForWin();
 };
@@ -213,7 +215,9 @@ const moveDown = () => {
     }
   }
 
-  randomPosition();
+
+    randomPosition();
+
   checkForGameOver();
   checkForWin();
 };
@@ -235,7 +239,10 @@ const moveLeft = () => {
     }
   }
 
-  randomPosition();
+
+    randomPosition();
+
+
   checkForGameOver();
   checkForWin();
 };
@@ -257,7 +264,9 @@ const moveRight = () => {
     }
   }
 
-  randomPosition();
+    randomPosition();
+
+
   checkForGameOver();
   checkForWin();
 };
@@ -283,7 +292,7 @@ const checkForWin = () => {
     for (let c = 0; c < columns; c++) {
       let number = gameBoard[r][c];
 
-      if (number === 2048 && flag) {
+      if (number === 2048 && flagMessage) {
         generateGameMessage(number);
 
         flag = false;
