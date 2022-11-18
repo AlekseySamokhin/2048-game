@@ -4,7 +4,7 @@ const rows = 4;
 const columns = 4;
 
 let score = 0;
-let bestScore;
+let bestScore = 0;
 
 let flag = true; // for don't show game message "you win" after 2048 point's
 
@@ -170,8 +170,6 @@ const move = (row) => {
     row.push(0); // [4, 0, 0, 0];
   }
 
-  checkBestScore();
-  
   // value best score in local-storage
   if (score > bestScore) {
     // replace value from localsrorage value from score
@@ -339,6 +337,8 @@ const restartGame = () => {
 
   document.addEventListener("keyup", controlSquares);
 
+  score = 0;
+
   elemScore.textContent = 0;
 
   randomPosition();
@@ -355,8 +355,8 @@ const continueGame = () => {
 // events
 document.addEventListener("DOMContentLoaded", () => {
   // functions is called when the page is loaded
-  checkBestScore();
   setGameBoard();
+  checkBestScore();
 });
 
 document.addEventListener("keyup", controlSquares);
