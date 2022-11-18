@@ -1,9 +1,4 @@
-let gameBoard = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
+let gameBoard;
 
 const rows = 4;
 const columns = 4;
@@ -15,9 +10,11 @@ let flag = true; // for don't show game message "you win" after 2048 point's
 
 const elemSquaresContainer = document.querySelector(".squares-container");
 
+// button's
 const btnNewGame = document.querySelector(".new-game");
 const btnContinueGame = document.querySelector(".continue-game");
 
+// game message block
 const elemMessageBlockGame = document.querySelector(".game-message");
 const elemMessageTitleGame = document.querySelector(".game-message__title");
 const elemMessageTextGame = document.querySelector(".game-message__text");
@@ -43,7 +40,7 @@ const randomPosition = () => {
     // two random numbers from 0 to 3
     let num1 = Math.floor(Math.random() * rows);
     let num2 = Math.floor(Math.random() * columns);
-    
+
     if (gameBoard[num1][num2] === 0) {
       let square = document.getElementById(`${num1}-${num2}`);
 
@@ -80,12 +77,19 @@ const updateSquareValue = (number, square) => {
   square.classList.add("square");
 
   if (number > 0) {
-    square.textContent = number.toString();
+    square.textContent = number;
     square.classList.add(`square-${number}`);
   }
 };
 
 const setGameBoard = () => {
+  gameBoard = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ];
+
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
       let square = document.createElement("div");
@@ -143,21 +147,27 @@ const controlSquares = (event) => {
 
 const filterZero = (array) => {
   return array.filter((num) => num != 0);
-}
+};
 
 const move = (row) => {
-  row = filterZero(row); // create new array without zeros;
+  row = filterZero(row); // create new array without zeros: [2, 2, 0, 0] => [2, 2];
 
   for (let i = 0; i < row.length; i++) {
     if (row[i] === row[i + 1]) {
       // if the values ​​of adjacent cells are the same
       row[i] = row[i] * 2;
-      row[i + 1] = 0;
+      row[i + 1] = 0; // [4, 0]
 
       score = score + row[i];
 
       elemScore.textContent = score;
     }
+  }
+
+  row = filterZero(row); // create new array without zeros: [4, 0] => [4]
+
+  while (row.length < rows) {
+    row.push(0); // [4, 0, 0, 0];
   }
 
   // value best score in local-storage
@@ -167,19 +177,13 @@ const move = (row) => {
     elemBestScore.textContent = score;
   }
 
-  row = filterZero(row); // create new array without zeros;
-
-  while (row.length < rows) {
-    row.push(0);
-  }
-
   return row;
 };
 
 const moveUp = () => {
   for (let c = 0; c < columns; c++) {
-    let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]];
-    row = move(row);
+    let row = [gameBoard[0][c], gameBoard[1][c], gameBoard[2][c], gameBoard[3][c]]; // [2, 2, 0, 0];
+    row = move(row); // [4, 0, 0, 0]
     for (let r = 0; r < rows; r++) {
       gameBoard[r][c] = row[r];
 
@@ -218,9 +222,9 @@ const moveDown = () => {
 
 const moveLeft = () => {
   for (let r = 0; r < rows; r++) {
-    let row = gameBoard[r]; // array
+    let row = gameBoard[r]; // array [2, 2, 0, 0] etc...
 
-    row = move(row);
+    row = move(row); // array [4, 0, 0, 0];
 
     gameBoard[r] = row;
 
@@ -240,11 +244,11 @@ const moveLeft = () => {
 
 const moveRight = () => {
   for (let r = 0; r < rows; r++) {
-    let row = gameBoard[r].reverse(); // array
+    let row = gameBoard[r].reverse(); // [0, 0, 2, 2] => [2, 2, 0, 0];
 
-    row = move(row);
+    row = move(row); // [4, 0, 0, 0];
 
-    gameBoard[r] = row.reverse();
+    gameBoard[r] = row.reverse(); // [0, 0, 0, 4];
 
     for (let c = 0; c < columns; c++) {
       let square = document.getElementById(`${r}-${c}`);
@@ -304,6 +308,7 @@ const generateGameMessage = (number) => {
     elemMessageTextGame.textContent = "Please, press New Game!";
   } else if (number === 2048) {
     elemMessageContinue.style.display = "block";
+
     elemMessageTitleGame.textContent = "You win!";
     elemMessageTextGame.textContent = "Our congratulations!";
   } else if (number === 8192) {
@@ -331,6 +336,8 @@ const restartGame = () => {
   elemMessageBlockGame.style.display = "none";
 
   document.addEventListener("keyup", controlSquares);
+
+  elemScore.textContent = 0;
 
   randomPosition();
   randomPosition();
